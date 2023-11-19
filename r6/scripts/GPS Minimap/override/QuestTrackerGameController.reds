@@ -1,5 +1,6 @@
 import Codeware.UI.*
 import GpsMinimap.Math.GetAnchorPoint
+import GpsMinimap.Constants.AnchorPoint.*
 
 /////////////////////////////////////////////////////////////////
 @addField(QuestTrackerGameController)
