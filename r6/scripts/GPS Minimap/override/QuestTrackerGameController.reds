@@ -1,5 +1,5 @@
 import Codeware.UI.*
-import GpsMinimap.Math.GetAnchorPoint
+import GpsMinimap.Math
 import GpsMinimap.Constants.AnchorPoint.*
 
 /////////////////////////////////////////////////////////////////
@@ -41,10 +41,10 @@ protected cb func OnMinimapToggle(isMinimapHidden: Bool) {
     let anchorPoint = new Vector2(0.0, 0.0); 
 
     if (isMinimapHidden) {
-      anchorPoint = GetAnchorPoint(screenSize, QuestWidget_Corner.GetCoefficient(), QuestWidget_Corner.GetOffset());
+      anchorPoint = Math.GetAnchorPoint(screenSize, QuestWidget_Corner.GetCoefficient(), QuestWidget_Corner.GetOffset());
     }
     else {
-      anchorPoint = GetAnchorPoint(screenSize, QuestWidget_Default.GetCoefficient(), QuestWidget_Default.GetOffset());
+      anchorPoint = Math.GetAnchorPoint(screenSize, QuestWidget_Default.GetCoefficient(), QuestWidget_Default.GetOffset());
     }
 
     // Apply changes to vanilla widget
