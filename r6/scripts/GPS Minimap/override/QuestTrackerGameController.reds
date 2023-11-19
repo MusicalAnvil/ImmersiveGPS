@@ -1,5 +1,5 @@
 import Codeware.UI.*
-import GpsMinimap.Math
+import GpsMinimap.*
 import GpsMinimap.Constants.AnchorPoint.*
 
 /////////////////////////////////////////////////////////////////
@@ -25,8 +25,8 @@ protected cb func OnInitialize() -> Bool {
 
     // Set up resolution watcher
     let resolutionWatcher = new VirtualResolutionWatcher();
-    watcher.Initialize(GetGameInstance());
-    watcher.NotifyController(this);
+    resolutionWatcher.Initialize(GetGameInstance());
+    resolutionWatcher.NotifyController(this);
 
     this.m_im_resolutionWatcher = resolutionWatcher;
 
