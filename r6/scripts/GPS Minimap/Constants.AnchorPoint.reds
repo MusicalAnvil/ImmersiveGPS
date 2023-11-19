@@ -1,7 +1,7 @@
 module GpsMinimap.Constants.AnchorPoint
 
 // Quest Widget - Default (Minimap ON) position
-class QuestWidget_Default {
+public class QuestWidget_Default {
     public static func GetCoefficient() -> Vector2 {
         return new Vector2(-0.001295, -0.001794);
     }
@@ -12,7 +12,7 @@ class QuestWidget_Default {
 }
 
 // Quest Widget - Corner (Minimap OFF) position
-class QuestWidget_Corner {
+public class QuestWidget_Corner {
     public static func GetCoefficient() -> Vector2 {
         return new Vector2(-0.001295, -0.000338);
     }

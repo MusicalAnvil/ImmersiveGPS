@@ -1,7 +1,7 @@
 module GpsMinimap
 
 /////////////////////////////////////////////////////////////////
-class Math
+public class Math
 {
     public static func GetAnchorPoint(screenSize: Vector2, coef: Vector2, offset: Vector2) -> Vector2 {
         let anchorX: Float = 0.0;
