@@ -19,6 +19,7 @@ InitTrackerMove = true
 CornerMoveWait = 3.0
 
 TrackerInCorner = false
+TrackerInstance = nil
 
 local config = require("config")
 local settings = {}
@@ -57,19 +58,21 @@ registerForEvent('onInit', function()
 
 	local isLoaded = Game.GetPlayer() and Game.GetPlayer():IsAttached() and not Game.GetSystemRequestsHandler():IsPreGame()
 
-	Observe('QuestTrackerGameController', 'OnInitialize', function()
+	Observe('QuestTrackerGameController', 'OnInitialize', function(self)
 		if not isLoaded then
 			print('Game Session Started')
 			isLoaded = true
 			InitTrackerMove = true
 			CornerMoveWait = 3
+			TrackerInstance = self
 		end
 	end)
 
-	Observe('QuestTrackerGameController', 'OnUninitialize', function()
+	Observe('QuestTrackerGameController', 'OnUninitialize', function(self)
 		if Game.GetPlayer() == nil then
 			print('Game Session Ended')
 			isLoaded = false
+			TrackerInstance = nil
 		end
 	end)
 
@@ -83,18 +86,18 @@ registerForEvent('onUpdate', function(deltaTime)
 		if not (Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), Game.GetAllBlackboardDefs().PlayerStateMachine):GetInt(Game.GetAllBlackboardDefs().PlayerStateMachine.Vehicle) == 0) then
 			Game.GetSettingsSystem():GetVar('/interface/hud', 'minimap'):SetValue(true)
 			if TrackerInCorner == true and settings.questMove == true then
-				questTrackerMoveDefault()
 				TrackerInCorner = false
 				CornerMoveWait = 0.6
+				TrackerInstance:OnMinimapToggle(TrackerInCorner)
 			end
 		else
 			Game.GetSettingsSystem():GetVar('/interface/hud', 'minimap'):SetValue(false)
 			if TrackerInCorner == false and CornerMoveWait > 0 and settings.questMove == true then
 				CornerMoveWait = CornerMoveWait - deltaTime
 				if CornerMoveWait <= 0 then
-					questTrackerMoveCorner()
 					TrackerInCorner = true
 					CornerMoveWait = 0
+					TrackerInstance:OnMinimapToggle(TrackerInCorner)
 				end
 			end
 		end
@@ -115,13 +118,13 @@ registerForEvent('onUpdate', function(deltaTime)
 			if minimapState == 0 then
 				if not (Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), Game.GetAllBlackboardDefs().PlayerStateMachine):GetInt(Game.GetAllBlackboardDefs().PlayerStateMachine.Vehicle) == 0) then
 					if settings.questMove == true then
-						questTrackerMoveDefault()
 						TrackerInCorner = false
+						TrackerInstance:OnMinimapToggle(TrackerInCorner)
 					end
 				else
 					if settings.questMove == true then
-						questTrackerMoveCorner()
 						TrackerInCorner = true
+						TrackerInstance:OnMinimapToggle(TrackerInCorner)
 					end
 				end
 			end
@@ -169,14 +172,14 @@ registerHotkey('gps_minimap_toggle', 'Change Minimap State', function()
 	if minimapState == 1 then 
 		Game.GetSettingsSystem():GetVar('/interface/hud', 'minimap'):SetValue(true)
 		if settings.questMove == true then
-			questTrackerMoveDefault()
 			TrackerInCorner = false
+			TrackerInstance:OnMinimapToggle(TrackerInCorner)
 		end
 	elseif minimapState == 2 then
 		Game.GetSettingsSystem():GetVar('/interface/hud', 'minimap'):SetValue(false)
 		if settings.questMove == true then
-			questTrackerMoveCorner()
 			TrackerInCorner = true
+			TrackerInstance:OnMinimapToggle(TrackerInCorner)
 		end
 	end
 	
