@@ -45,26 +45,40 @@ public func questTrackerMoveCorner() {
 
     let m_resolutionListener: ref<VirtualResolutionWatcher> = new VirtualResolutionWatcher();
     m_resolutionListener.Initialize(GetGameInstance());
+
+    let moveActionCompleted: Bool = false;
     
     for layer in layers {
         for controller in layer.GetGameControllers() {
             if controller.IsA(n"QuestTrackerGameController") {
-                let questWidgetCustom: ref<inkCanvas> = new inkCanvas();
-                let questWidgetBase: ref<inkCompoundWidget> = controller.GetRootCompoundWidget();
-                questWidgetCustom.Reparent(root);
-                m_resolutionListener.ScaleWidget(controller.GetRootWidget());                
-                questWidgetBase.SetAnchor(inkEAnchor.Centered);
-                
-                questWidgetBase.Reparent(questWidgetCustom);
-                
-                //the worst scaling solution you have ever seen
-                let m_screenSize = ScreenHelper.GetScreenSize(GetGameInstance());
-                let screenWidth: Float = m_screenSize.X;
-                let screenHeight: Float = m_screenSize.Y;
-                let anchorX: Float = CalculateNewAnchorPoint(screenWidth, -0.001295, 0.5694);   //coef -0.001295, offset 0.5694
-                let anchorY: Float = CalculateNewAnchorPoint(screenHeight, -0.000338, 0.021);    //coef -0.000338, offset 0.021
-                questWidgetBase.SetAnchorPoint(anchorX, anchorY);
+                if !moveActionCompleted {
+                    let questWidgetCustom: ref<inkCanvas> = new inkCanvas();
+                    let questWidgetBase: ref<inkCompoundWidget> = controller.GetRootCompoundWidget();
+                    questWidgetCustom.Reparent(root);
+                    m_resolutionListener.ScaleWidget(controller.GetRootWidget());                
+                    questWidgetBase.SetAnchor(inkEAnchor.Centered);
+                    
+                    questWidgetBase.Reparent(questWidgetCustom);
+                    
+                    //the worst scaling solution you have ever seen
+                    let m_screenSize = ScreenHelper.GetScreenSize(GetGameInstance());
+                    let screenWidth: Float = m_screenSize.X;
+                    let screenHeight: Float = m_screenSize.Y;
+                    let anchorX: Float = CalculateNewAnchorPoint(screenWidth, -0.001295, 0.5694);   //coef -0.001295, offset 0.5694
+                    let anchorY: Float = CalculateNewAnchorPoint(screenHeight, -0.000338, 0.021);    //coef -0.000338, offset 0.021
+                    questWidgetBase.SetAnchorPoint(anchorX, anchorY);
 
+                    moveActionCompleted = true;
+                    
+                } else {
+                    let questWidgetCustom: ref<inkCanvas> = new inkCanvas();
+                    let questWidgetBase: ref<inkCompoundWidget> = controller.GetRootCompoundWidget();
+                    questWidgetCustom.Reparent(root);
+                    m_resolutionListener.ScaleWidget(controller.GetRootWidget());                
+                    questWidgetBase.SetAnchor(inkEAnchor.Centered);
+                    questWidgetBase.Reparent(questWidgetCustom);
+                    questWidgetBase.SetAnchorPoint(99.0, 99.0);
+                }
                 //questWidgetBase.SetAnchorPoint(-4.4, -0.71); //functional value for 4k
                 //questWidgetBase.SetAnchorPoint(-1.917, -0.344); //functional value for 1080p
                 //questWidgetBase.SetAnchorPoint(-1.092, -0.224); //functional value for 720p
@@ -82,26 +96,40 @@ public func questTrackerMoveDefault() {
 
     let m_resolutionListener: ref<VirtualResolutionWatcher> = new VirtualResolutionWatcher();
     m_resolutionListener.Initialize(GetGameInstance());
+
+    let moveActionCompleted: Bool = false;
     
     for layer in layers {
         for controller in layer.GetGameControllers() {
             if controller.IsA(n"QuestTrackerGameController") {
-                let questWidgetCustom: ref<inkCanvas> = new inkCanvas();
-                let questWidgetBase: ref<inkCompoundWidget> = controller.GetRootCompoundWidget();
-                questWidgetCustom.Reparent(root);
-                m_resolutionListener.ScaleWidget(controller.GetRootWidget());                
-                questWidgetBase.SetAnchor(inkEAnchor.Centered);
-                
-                questWidgetBase.Reparent(questWidgetCustom);
+                if !moveActionCompleted {
+                    let questWidgetCustom: ref<inkCanvas> = new inkCanvas();
+                    let questWidgetBase: ref<inkCompoundWidget> = controller.GetRootCompoundWidget();
+                    questWidgetCustom.Reparent(root);
+                    m_resolutionListener.ScaleWidget(controller.GetRootWidget());                
+                    questWidgetBase.SetAnchor(inkEAnchor.Centered);
+                    
+                    questWidgetBase.Reparent(questWidgetCustom);
 
-                //the worst scaling solution you have ever seen
-                let m_screenSize = ScreenHelper.GetScreenSize(GetGameInstance());
-                let screenWidth: Float = m_screenSize.X;
-                let screenHeight: Float = m_screenSize.Y;
-                let anchorX: Float = CalculateNewAnchorPoint(screenWidth, -0.001295, 0.5694);   //coef -0.001295, offset 0.5694 | Same as above
-                let anchorY: Float = CalculateNewAnchorPoint(screenHeight, -0.001794, 0.02);    //coef -0.001794, offset 0.02
-                questWidgetBase.SetAnchorPoint(anchorX, anchorY);
+                    //the worst scaling solution you have ever seen
+                    let m_screenSize = ScreenHelper.GetScreenSize(GetGameInstance());
+                    let screenWidth: Float = m_screenSize.X;
+                    let screenHeight: Float = m_screenSize.Y;
+                    let anchorX: Float = CalculateNewAnchorPoint(screenWidth, -0.001295, 0.5694);   //coef -0.001295, offset 0.5694 | Same as above
+                    let anchorY: Float = CalculateNewAnchorPoint(screenHeight, -0.001794, 0.02);    //coef -0.001794, offset 0.02
+                    questWidgetBase.SetAnchorPoint(anchorX, anchorY);
 
+                    moveActionCompleted = true;
+
+                } else {
+                    let questWidgetCustom: ref<inkCanvas> = new inkCanvas();
+                    let questWidgetBase: ref<inkCompoundWidget> = controller.GetRootCompoundWidget();
+                    questWidgetCustom.Reparent(root);
+                    m_resolutionListener.ScaleWidget(controller.GetRootWidget());                
+                    questWidgetBase.SetAnchor(inkEAnchor.Centered);
+                    questWidgetBase.Reparent(questWidgetCustom);
+                    questWidgetBase.SetAnchorPoint(99.0, 99.0);
+                }
                 //questWidgetBase.SetAnchorPoint(-4.4, -3.858); //functional value for 4k
                 //questWidgetBase.SetAnchorPoint(-1.917, -1.917); //functional value for 1080p
                 //questWidgetBase.SetAnchorPoint(-1.092, -1.275); //functional value for 720p

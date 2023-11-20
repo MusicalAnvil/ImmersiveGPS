@@ -17,8 +17,10 @@ uiState = true
 
 InitTrackerMove = true
 CornerMoveWait = 3.0
+DeviceTakeoverWait = 0.3 	--accounts for short time during takeover and release where new tracker cannot be moved
 
 TrackerInCorner = false
+TrackerCameraState = false
 
 local config = require("config")
 local settings = {}
@@ -59,16 +61,17 @@ registerForEvent('onInit', function()
 
 	Observe('QuestTrackerGameController', 'OnInitialize', function()
 		if not isLoaded then
-			print('Game Session Started')
+			--print('Game Session Started')
 			isLoaded = true
 			InitTrackerMove = true
 			CornerMoveWait = 3
+			TrackerCameraState = false
 		end
 	end)
 
 	Observe('QuestTrackerGameController', 'OnUninitialize', function()
 		if Game.GetPlayer() == nil then
-			print('Game Session Ended')
+			--print('Game Session Ended')
 			isLoaded = false
 		end
 	end)
@@ -105,6 +108,30 @@ registerForEvent('onUpdate', function(deltaTime)
 		shouldDrawTimeout = shouldDrawTimeout - deltaTime
 		if shouldDrawTimeout <= 0 then
 			shouldDrawTimeout = 0
+		end
+	end
+
+	-- Camera Bug Fix
+	if TrackerCameraState == false and (Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), Game.GetAllBlackboardDefs().PlayerStateMachine):GetBool(Game.GetAllBlackboardDefs().PlayerStateMachine.IsControllingDevice) == true) then
+		if DeviceTakeoverWait > 0 then
+			DeviceTakeoverWait = DeviceTakeoverWait - deltaTime
+			if DeviceTakeoverWait <= 0 then
+				questTrackerMoveCorner()
+				TrackerCameraState = true
+				DeviceTakeoverWait = 0.58
+				--print('Camera Detected!')
+			end
+		end	
+	elseif TrackerCameraState == true and not (Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), Game.GetAllBlackboardDefs().PlayerStateMachine):GetBool(Game.GetAllBlackboardDefs().PlayerStateMachine.IsControllingDevice) == true) then
+		if DeviceTakeoverWait > 0 then
+			DeviceTakeoverWait = DeviceTakeoverWait - deltaTime
+			if DeviceTakeoverWait <= 0 then
+				questTrackerMoveCorner()
+				TrackerCameraState = false
+				TrackerInCorner = false
+				DeviceTakeoverWait = 0.3
+				--print('Camera No Longer Detected!')
+			end
 		end
 	end
 
