@@ -126,7 +126,11 @@ registerForEvent('onUpdate', function(deltaTime)
 		if DeviceTakeoverWait > 0 then
 			DeviceTakeoverWait = DeviceTakeoverWait - deltaTime
 			if DeviceTakeoverWait <= 0 then
-				questTrackerMoveCorner()
+				if not (Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), Game.GetAllBlackboardDefs().PlayerStateMachine):GetInt(Game.GetAllBlackboardDefs().PlayerStateMachine.Vehicle) == 0) then
+					questTrackerMoveDefault()
+				else
+					questTrackerMoveCorner()
+				end
 				TrackerCameraState = false
 				TrackerInCorner = false
 				DeviceTakeoverWait = 0.3
@@ -144,17 +148,19 @@ registerForEvent('onUpdate', function(deltaTime)
 					if settings.questMove == true then
 						questTrackerMoveDefault()
 						TrackerInCorner = false
+						CornerMoveWait = 0.6
 					end
 				else
 					if settings.questMove == true then
 						questTrackerMoveCorner()
 						TrackerInCorner = true
+						CornerMoveWait = 0
 					end
 				end
 			end
 
 			InitTrackerMove = false
-			CornerMoveWait = 0
+
 		end
 	end
 end)
