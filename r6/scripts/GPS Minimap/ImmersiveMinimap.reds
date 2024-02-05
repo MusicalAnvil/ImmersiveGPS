@@ -2,6 +2,7 @@ import Codeware.UI.*
 
 native func LogChannel(channel: CName, const text: script_ref<String>) //CDPR apparently removed this in 2.0?
 
+//debug function for searching out game modules (not included in release version)
 public func debugLayers() {
     let inkSystem = GameInstance.GetInkSystem();
     let layers = inkSystem.GetLayers();
@@ -17,6 +18,8 @@ public func debugLayers() {
     }
 }
 
+//resolution watcher for resolution changes (not implemented yet)
+/*
 public func initializeResolutionWatcher() {
 
     let system = GameInstance.GetInkSystem();
@@ -35,8 +38,8 @@ public func initializeResolutionWatcher() {
             }
         }
     }
-
 }
+*/
 
 public func questTrackerMoveCorner() {
     let system = GameInstance.GetInkSystem();
@@ -60,7 +63,9 @@ public func questTrackerMoveCorner() {
                     
                     questWidgetBase.Reparent(questWidgetCustom);
                     
-                    //the worst scaling solution you have ever seen
+                    //Running linear regressions in lieu of having a working resolution watcher function
+                            //Causes some uneven scaling across resolutions, and requires manual invocation. 
+                            //Added extra invocations via game state checker in init.lua to avoid issues with the latter. 
                     let m_screenSize = ScreenHelper.GetScreenSize(GetGameInstance());
                     let screenWidth: Float = m_screenSize.X;
                     let screenHeight: Float = m_screenSize.Y;
@@ -89,6 +94,7 @@ public func questTrackerMoveCorner() {
     }
 }
 
+//This is the same function as above with different numbers.
 public func questTrackerMoveDefault() {
     let system = GameInstance.GetInkSystem();
     let root: ref<inkCompoundWidget> = system.GetLayer(n"inkHUDLayer").GetVirtualWindow();
@@ -145,7 +151,7 @@ private func CalculateNewAnchorPoint(xy: Float, coef: Float, offset: Float) -> F
     return output;
 }
 
-//Not working atm
+//Not working at the moment
 protected cb func OnResolutionChange(evt: ref<VirtualResolutionChangeEvent>) {
     LogChannel(n"DEBUG", s"Resolution change detected!");
 }
